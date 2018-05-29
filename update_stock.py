@@ -46,8 +46,7 @@ stock_id = input("Enter stock id:")
 
 """ Select item_description and qunatity from sku_tbl and stock
 """
-sql_string = "SELECT a.item_description, b.quantity, b.stock_reference FROM sku_tbl a inner join stock b \
-ON a.stock_reference=b.stock_reference WHERE a.id="+str(stock_id)
+sql_string = "SELECT item_description, quantity, stock_reference FROM stock;
 
 cursor = db.selectSQL(sql_string)
 
