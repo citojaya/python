@@ -46,7 +46,7 @@ stock_id = input("Enter stock id:")
 
 """ Select item_description and qunatity from sku_tbl and stock
 """
-sql_string = "SELECT item_description, quantity, stock_reference FROM stock;
+sql_string = "SELECT item_description, quantity, stock_reference FROM stock WHERE stock_id="+str(stock_id);
 
 cursor = db.selectSQL(sql_string)
 

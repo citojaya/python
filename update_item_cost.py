@@ -16,7 +16,7 @@ p = OptionParser(usage="""usage: %prog [options]
 Read the CSV containing sales_record_number and shipping cost and update shipping column in item_cost table
 Update cost column in item_cost table
 
-Ex: python update_item_cost.py -d "ebay_database" -f "ebay_file"
+Ex: python update_item_cost.py -d "ebay_database" -f "shipping_file"
  -d = database name
  -f = csv file containing shipping cost
 
