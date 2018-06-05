@@ -2,7 +2,6 @@
     option -d defines database name and option -f defines input CSV file which contains shipping cost
 """
 import sys
-import datetime
 from optparse import OptionParser, OptionValueError
 from dateutil import parser
 from database import Database
@@ -43,27 +42,20 @@ db.getConnection()
 
 """ Read input id for the stock
 """
-stock_id = input("Enter stock id:")
+this_string = input("Enter item description:")
 
 """ Select item_description and qunatity from sku_tbl and stock
 """
-sql_string = "SELECT item_description, quantity, stock_reference, last_update FROM stock WHERE stock_id="+str(stock_id)
+sql_string = "SELECT stock_id, item_description, quantity, stock_reference FROM stock WHERE \
+item_description LIKE '%"+str(this_string)+"%'"
+
+print sql_string
+#sys.exit(0)
 
 cursor = db.selectSQL(sql_string)
 
 for row in cursor:
-  print("  "+row[0])
-  print("  Current Stock = "+str(row[1]))
-  print("  Last update = "+str(row[3]))
-  new_stock = input("Enter new quantity:")
-  now = datetime.datetime.now()
-  date = str(now)
-  print date[:10]
-  sql_string = "UPDATE stock SET quantity="+str(new_stock)+",last_update='"+str(date[:10])+"' WHERE stock_reference='"+row[2]+"'"
-  print (sql_string)
-  db.updateSQL(sql_string)
-  print("Stock updated successfully")
-  #print(sql_string)
+  print("  "+str(row[0])+" "+row[1])
 
 
 """ Close database
