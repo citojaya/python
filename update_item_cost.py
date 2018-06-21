@@ -14,7 +14,8 @@ from re import sub
 # parse command line
 p = OptionParser(usage="""usage: %prog [options]
 Read the CSV containing sales_record_number and shipping cost and update shipping column in item_cost table
-Update cost column in item_cost table
+If record is available in sales_tbl update cost column in item_cost table otherwise it will not be updated. 
+First update sales_tbl using sales.py and then update_item_cost.py
 
 Ex: python update_item_cost.py -d "ebay_database" -f "shipping_file"
  -d = database name
