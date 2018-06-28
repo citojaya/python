@@ -59,11 +59,35 @@ for dict in dataset:
   #print (dict['Sales Record Number'])
   sql_string = "INSERT INTO sales_tbl (sales_record_number,user_id)\
   VALUES("+dict['Sales Record Number']+\
-  ",'"+dict['User ID']+"',)"
+  ",'"+dict['User ID']+"'"+\
+  ",'"+dict['Buyer Fullname']+"'"+\
+  ",'"+dict['Buyer Phone Number']+"'"+\
+  ",'"+dict['Buyer Email']+"'"+\
+  ",'"+dict['Post To Address 1']+"'"+\
+  ",'"+dict['Post To Address 2']+"'"+\
+  ",'"+dict['Post To City']+"'"+\
+  ",'"+dict['Post To State']+"'"+\
+  ",'"+dict['Post To Postcode']+"'"+\
+  ",'"+dict['Post To Country']+"'"+\
+  ",'"+dict['Item Title']+"'"+\
+  ","+dict['Quantity']+\
+  ","+dict['Sale Price']+\
+  ","+dict['Postage and Handling']+\
+  ",'"+dict['Sale Date']+"'"+\
+  ",'"+dict['PayPal Transaction ID']+"'"+\
+  ",'"+dict['Transaction ID']+"'"+\
+  ",'"+dict['Item ID']+"'"+\
+  ",'"+dict['Paid on Date']+"'"+\
+  ",'"+dict['Posted on Date']+"'"+\
+  ",'"+dict['Phone']+"'"+\
+  ",'"+dict['Feedback Received']+"'"+\
+  ",'"+dict['Custom Label']+"'"+\
+  ",'"+dict['Variation Details']+"'"+\
+  ")"
   print (sql_string)
   # seq = str(dict['sales_record_number'])+","+str(dict['shipping'])
   # sql_string = "INSERT INTO item_cost (sales_record_number,shipping) VALUES("+seq+")"
-  db.insertSQL(sql_string)
+  #db.insertSQL(sql_string)
 
 
 """ Close database
