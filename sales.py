@@ -56,10 +56,14 @@ csvfile = Fileio(f_name)
 dataset = csvfile.getDataSet()
 #print ("Inserting into item_cost table")
 for dict in dataset:
-  print (dict['Sales Record Number'])
+  #print (dict['Sales Record Number'])
+  sql_string = "INSERT INTO sales_tbl (sales_record_number,user_id)\
+  VALUES("+dict['Sales Record Number']+\
+  ",'"+dict['User ID']+"',)"
+  print (sql_string)
   # seq = str(dict['sales_record_number'])+","+str(dict['shipping'])
   # sql_string = "INSERT INTO item_cost (sales_record_number,shipping) VALUES("+seq+")"
-  # db.insertSQL(sql_string)
+  db.insertSQL(sql_string)
 
 
 """ Close database
