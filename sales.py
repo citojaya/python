@@ -57,7 +57,13 @@ dataset = csvfile.getDataSet()
 #print ("Inserting into item_cost table")
 for dict in dataset:
   #print (dict['Sales Record Number'])
-  sql_string = "INSERT INTO sales_tbl (sales_record_number,user_id)\
+  sale_price = Decimal(sub(r'[^\d.]', '', dict['Sale Price']))
+  postage=Decimal(sub(r'[^\d.]', '', dict['Postage and Handling']))
+  sql_string = "INSERT INTO sales_tbl (sales_record_number,user_id,buyer_fullname,buyer_phone,buyer_email,\
+  buyer_address_1,buyer_address_2,buyer_city,buyer_state,\
+  buyer_postcode,buyer_country,item_description,\
+  quantity,sale_price,postage,sale_date,paypal_transaction_id,transaction_id,item_number,paid_date,posted_date,\
+  buyer_phone,feedback,custom_lable,variation)\
   VALUES("+dict['Sales Record Number']+\
   ",'"+dict['User ID']+"'"+\
   ",'"+dict['Buyer Fullname']+"'"+\
@@ -71,8 +77,8 @@ for dict in dataset:
   ",'"+dict['Post To Country']+"'"+\
   ",'"+dict['Item Title']+"'"+\
   ","+dict['Quantity']+\
-  ","+dict['Sale Price']+\
-  ","+dict['Postage and Handling']+\
+  ","+str(sale_price)+\
+  ","+str(postage)+\
   ",'"+dict['Sale Date']+"'"+\
   ",'"+dict['PayPal Transaction ID']+"'"+\
   ",'"+dict['Transaction ID']+"'"+\
