@@ -65,14 +65,15 @@ for dict in dataset:
 
 """ Read CSV file and update shipping column in item_cost table
 """
-# print ("Reading CSV file "+f_name+".csv")
-# csvfile = Fileio(f_name+".csv")
-# dataset = csvfile.getDataSet()
-# print ("Updating shipping values in item_cost table")
-# for dict in dataset:
-#   seq = str(dict['sales_record_number'])+","+str(dict['shipping'])
-#   sql_string = "UPDATE item_cost SET shipping="+str(dict['shipping'])+" WHERE sales_record_number="+str(dict['sales_record_number'])
-#   db.updateSQL(sql_string)
+print ("Reading CSV file "+f_name+".csv")
+csvfile = Fileio(f_name+".csv")
+dataset = csvfile.getDataSet()
+print ("Updating shipping values in item_cost table")
+for dict in dataset:
+  seq = str(dict['sales_record_number'])+","+str(dict['shipping'])
+  sql_string = "UPDATE item_cost SET shipping="+str(dict['shipping'])+" WHERE sales_record_number="+str(dict['sales_record_number'])
+  db.updateSQL(sql_string)
+  print (sql_string)
 
 
 """ Select sales_record_number, custom_lable and cost from item_cost by using 
@@ -85,11 +86,21 @@ b.quantity*c.units_per_order*d.unit_cost*d.unit_cost_conversion+c.package_cost f
  on c.stock_reference=d.stock_reference"
 
 cursor = db.selectSQL(sql_string)
-
+prev_sales_rec_num = 0
+prev_cost = 0
+total_cost = 0
 print ("Updating cost values in item_cost table")
 for row in cursor:
-  sql_string = "UPDATE item_cost set cost="+str(row[2])+" WHERE sales_record_number="+str(row[0])
+  if (prev_sales_rec_num == row[0]):
+    total_cost = prev_cost + row[2]
+  else:
+    total_cost = row[2]
+  prev_cost = total_cost
+  sql_string = "UPDATE item_cost set cost="+str(total_cost)+" WHERE sales_record_number="+str(row[0])
   db.updateSQL(sql_string)
+ 
+  prev_sales_rec_num = row[0]
+  #print(sql_string)
 
 
 """ Select from stock and insert into package_cost

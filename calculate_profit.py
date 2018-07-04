@@ -1,5 +1,4 @@
-""" Update item_cost table
-    option -d defines database name and option -f defines input CSV file which contains shipping cost
+""" Calculate profit for a given period
 """
 import sys
 from optparse import OptionParser, OptionValueError
@@ -84,12 +83,13 @@ print ("Total")
 print ("  Sales",total_sale_price)
 print("  Postage Paid By Buyer",total_postage)
 print("  Cost",total_cost)
+print ("  Total Package cost",total_package_cost)
 print("  Shipping",total_shipping)
 print("  Ebay+Paypal charges",total_sale_price*0.15)
-profit = total_sale_price-total_sale_price*0.15-total_cost-total_shipping
+profit = total_sale_price-total_sale_price*0.15-total_cost-total_shipping-total_package_cost
 print("  Profit ",profit)
 print ("  Margin Percentage", 100*profit/total_sale_price)
-print ("  Profit/Cost Percentage", 100*profit/total_cost)
+print ("  Profit/Cost Percentage", 100*profit/(total_cost+total_package_cost))
 
 """ Close database
 """
