@@ -14,7 +14,7 @@ from re import sub
 
 # parse command line
 p = OptionParser(usage="""usage: %prog [options]
-Read records from ct_database and update bn_database
+Read records from source database and update destination database
 
 Ex: python update_bitnami.py
  
@@ -38,14 +38,14 @@ p.add_option("-d", "--dbase", action="store", type="str", default="NONE", dest="
 user = "cito"
 passwd = "citoKUKU123"
 
-db1 = "ct_database"
-db2 = "bn_database"
+db1 = "mps_database" # source database
+db2 = "bn_mps_database" # destination database
 
 ct_sku_prod_id = {}
 ct_product = {}
 ct_product_disc = {}
 
-""" Read records from ct_database and store in a dictionary
+""" Read records from first database and store in a dictionary
 """
 db = Database(db1,user,passwd)
 db.getConnection()
@@ -82,6 +82,7 @@ for k,v in bn_sku_prod_id.iteritems():
   #print(v,ct_sku_prod_id[k])
 
 
+#sys.exit(0)
 """ Update bn_database
 k - product_id in bn_database
 v - product_id in ct_database
@@ -94,12 +95,12 @@ for k,v in bn_ct_prod_id.iteritems():
   sql_string = "UPDATE oc_product set image='"+ct_product[v][0]+"', price="+str(ct_product[v][1])+", \
   date_available='"+str(ct_product[v][2])+"' WHERE product_id="+str(k)
   
-  print(sql_string)
+  #print(sql_string)
   db.updateSQL(sql_string)
 
   # data = ct_product_disc[v].split()
   sql_string = "UPDATE oc_product_description SET name='"+ct_product_disc[v][0]+\
-  "',description='"+ct_product_disc[v][1]+\
+  "',description='"+ct_product_disc[v][1].replace("'"," ")+\
   "',meta_title='"+ct_product_disc[v][2]+\
   "',meta_description='"+ct_product_disc[v][3]+\
   "',meta_keyword='"+ct_product_disc[v][4]+"' WHERE product_id="+str(k)
@@ -107,7 +108,7 @@ for k,v in bn_ct_prod_id.iteritems():
   db.updateSQL(sql_string)
 db.closeDatabase()
 
-
+#"',description='"+ct_product_disc[v][1].replace('"',' ')+\
 
 sys.exit(0)
 
