@@ -22,7 +22,7 @@ Ex: python update_bitnami.py
 """)
 p.add_option("-v", action="store_true", dest="verbose",  help="Verbose")
 #p.add_option("-a", action="store_true", dest="ascii",  help="ASCII, instead of binary, VTK output")
-p.add_option("-d", "--dbase", action="store", type="str", default="NONE", dest="readdb", help="Website Database")
+#p.add_option("-d", "--dbase", action="store", type="str", default="NONE", dest="readdb", help="Website Database")
 
 (opts, args) = p.parse_args()
 
@@ -38,8 +38,8 @@ p.add_option("-d", "--dbase", action="store", type="str", default="NONE", dest="
 user = "cito"
 passwd = "citoKUKU123"
 
-db1 = "mps_database" # source database
-db2 = "bn_mps_database" # destination database
+db1 = "ct_database" # source database
+db2 = "bn_database" # destination database
 
 ct_sku_prod_id = {}
 ct_product = {}

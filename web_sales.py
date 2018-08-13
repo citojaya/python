@@ -137,9 +137,8 @@ p = OptionParser(usage="""usage: %prog [options]
 Read oc_order, oc_order_product and oc_order_total and insert sales record into web_sales_tbl
 
 Ex: 
-  ./salereport.py -f 'sales.csv' -d ebay_database
+  ./web_sales.py -d cg_database
   -d = database name
-  -f = csv file downloaded from ebay
 
 """)
 p.add_option("-v", action="store_true", dest="verbose",  help="Verbose")

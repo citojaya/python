@@ -133,7 +133,7 @@ if opts.readdb == "NONE":
 if opts.readf == "NONE":
   print ("CSV file not defined")
   sys.exit(0) 
-elif opts.readdb == "ebay_database":
+elif opts.readdb == "ct_database":
   db_name = opts.readdb
   f_name = opts.readf
   insertRecord(db_name,f_name)

@@ -34,7 +34,7 @@ def calculate_web_sales(db_name,sql_string):
       total_postage += float(row[1])
       total_discount += float(row[0])
     
-    sql_string = "SELECT amount FROM refunds WHERE sales_record_number="+str(k)
+    sql_string = "SELECT amount FROM web_refunds WHERE sales_record_number="+str(k)
     cursor = db.selectSQL(sql_string)
     for row in cursor: 
       total_refunds += float(row[0])
@@ -88,7 +88,7 @@ def calculate_ebay_sales(db_name,sql_string):
     total_cost += float(row[3])
     total_shipping += float(row[4])
       
-    sql_string = "SELECT amount FROM refunds WHERE sales_record_number="+str(row[0])
+    sql_string = "SELECT amount FROM ebay_refunds WHERE sales_record_number="+str(row[0])
     cursor = db.selectSQL(sql_string)
     for row in cursor: 
       total_refunds += float(row[0])
@@ -99,9 +99,9 @@ def calculate_ebay_sales(db_name,sql_string):
   #print("  Postage Paid By Buyer",total_postage)
   print("  Cost",total_cost)
   print("  Shipping",total_shipping)
-  print("  Paypal charges",total_sale_price*0.05)
+  print("  Ebay and Paypal charges",total_sale_price*0.15)
   print("  Refunds ",total_refunds)
-  profit = total_sale_price+total_discount-total_sale_price*0.05-total_cost-total_shipping
+  profit = total_sale_price-total_sale_price*0.15-total_cost-total_shipping
   print("  Profit ",profit)
   if (total_sale_price != 0):
     print ("  Margin Percentage", 100*profit/total_sale_price)
@@ -199,9 +199,14 @@ if opts.store == "NONE":
 else:
   store_type = opts.store
 
-if len(args) < 2:
+if len(args) < 1:
   print "Input paramaters should be greater than one"
   sys.exit(0)
+elif len(args) == 1:
+  (num) = args[0]
+  if (store_type=="web"):
+    sql_string = "SELECT sales_record_number FROM shipping_tbl WHERE sales_record_number="+num
+    calculate_web_sales(db_name,sql_string)
 elif len(args) ==2:
   (start_date, end_date) = args
   if (store_type=="web"):
@@ -217,8 +222,8 @@ elif len(args) ==2:
     +store_type+"_sales_tbl a INNER JOIN "+store_type+"_item_cost b\
      ON a.sales_record_number=b.sales_record_number WHERE \
     a.sale_date>='"+start_date+"' AND a.sale_date<='"+end_date+"'"
-    # print(sql_string)
-    # sys.exit(0)
+    #print(sql_string)
+    #sys.exit(0)
     calculate_ebay_sales(db_name,sql_string)
     
 

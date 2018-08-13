@@ -86,6 +86,7 @@ def update_item_cost(db_name,store,outstring):
     inner join "+store+"_sales_tbl b on a.sales_record_number=b.sales_record_number\
     inner join sku_tbl c on b.custom_lable=c.custom_lable inner join stock d \
     on c.stock_reference=d.stock_reference"
+    #print(sql_string2)
     if sales_record == 0:
       update_item_cost2(db,sql_string2,store,outstring)
       db.closeDatabase()

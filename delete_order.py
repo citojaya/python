@@ -37,10 +37,12 @@ def delete_record(f_name,db_name,tb_name):
 
 # parse command line
 p = OptionParser(usage="""usage: %prog [options]
-Delete records from a given database
+Delete records from a given database and given table.
+Records to be deleted should be given in the CSV file.
+Can be applied to any table provided that sales_record_number is present
 
 Ex: 
-  ./delete_record.py -f 'sales.csv' -d ebay_database -t table
+  ./delete_record.py -f 'sales.csv' -d cg_database -t table
   -f = CSV file containing records
   -d = database name
   -t = table name
