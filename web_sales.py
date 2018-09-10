@@ -22,7 +22,8 @@ def read_oc_order_product(db_name):
   db = Database(db_name,user,passwd)
   db.getConnection()
 
-  sql_string = "select order_id, name, model, quantity, price from oc_order_product"
+  sql_string = "select a.order_id, a.name, a.model, a.quantity, a.price from oc_order_product a inner join \
+  oc_order b on a.order_id=b.order_id where b.order_status_id>0"
   cursor = db.selectSQL(sql_string)
 
   previous_record = 0

@@ -29,28 +29,24 @@ def update_webcg_item_cost(db_name,store):
   update_item_cost(db_name,store,"UPDATING web_item_cost")
   # Update cost in item_cost_web
 
-def update_item_cost_table(db, sql_string,store,outstring):
-  """ Update cost column in item_cost one by one 
-  """
+def update_item_cost2(db, sql_string,store,outstring):
   prev_sales_rec_num = 0
   prev_cost = 0
   total_cost = 0
   print (outstring)
 
-  
   total_cost = 0
   sales_record_number = 0
   cursor = db.selectSQL(sql_string)
   for row in cursor:
     sales_record_number = row[0]
     total_cost += float(row[2]) + float(row[3])
-    sql_string = "UPDATE stock set quantity=quantity-"+str(row[4])+" WHERE stock_reference='"+str(row[5])+"'"
-    print (sql_string)
-    db.updateSQL(sql_string)   
-  
-  print("TOTAL COST",total_cost)
-
+    
   sql_string = "UPDATE "+store+"_item_cost set cost="+str(round(int(total_cost * 1000) / 1000.0,2))+" WHERE sales_record_number="+str(sales_record_number)
+  print(sql_string)
+  db.closeDatabase()
+  sys.exit(0)
+
   db.updateSQL(sql_string)
  
 
@@ -70,24 +66,25 @@ def update_item_cost(db_name,store,outstring):
     sales_record = input("  Enter sales record number (Exit 0): ")
 
     sql_string2 = "select a.sales_record_number,b.custom_lable, \
-    b.quantity*c.units_per_order*d.unit_cost*d.unit_cost_conversion,b.quantity*c.package_cost, \
-    b.quantity,c.stock_reference from "+store+"_item_cost a\
+    b.quantity*c.units_per_order*d.unit_cost*d.unit_cost_conversion,b.quantity*c.package_cost from "+store+"_item_cost a\
     inner join "+store+"_sales_tbl b on a.sales_record_number=b.sales_record_number\
     inner join sku_tbl c on b.custom_lable=c.custom_lable inner join stock d \
     on c.stock_reference=d.stock_reference where a.sales_record_number="+str(sales_record)
-    
+    update_item_cost2(db,sql_string2,store,outstring)
     # print(sql_string2)
     # db.closeDatabase()
     # sys.exit(0)
-    update_item_cost_table(db,sql_string2,store,outstring)
 
     if sales_record == 0:
+      #update_item_cost2(db,sql_string2,store,outstring)
       db.closeDatabase()
       exit(1)
     shipping = input("  Enter postage cost: ")
     print("------------------------")
     sql_string = "INSERT INTO "+store+"_item_cost (sales_record_number, shipping) VALUES ("+str(sales_record)+","+str(shipping)+")"
     db.insertSQL(sql_string)
+
+  update_item_cost2(db,sql_string2,store,outstring)
  
   """ Close database
   """
