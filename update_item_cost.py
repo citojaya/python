@@ -42,6 +42,9 @@ def update_item_cost_table(db, sql_string,store,outstring):
   sales_record_number = 0
   cursor = db.selectSQL(sql_string)
   for row in cursor:
+    # print ("ROW IN CURSOR",row[0])
+    # print ("ROW IN CURSOR",row[2])
+    # print ("ROW IN CURSOR",row[3])
     sales_record_number = row[0]
     total_cost += float(row[2]) + float(row[3])
     sql_string = "UPDATE stock set quantity=quantity-"+str(row[4])+" WHERE stock_reference='"+str(row[5])+"'"
@@ -68,26 +71,23 @@ def update_item_cost(db_name,store,outstring):
   record_list = []
   while sales_record > 0:
     sales_record = input("  Enter sales record number (Exit 0): ")
+    if sales_record == 0:
+      db.closeDatabase()
+      exit(0)
+
+    shipping = input("  Enter postage cost: ")
+    sql_string = "INSERT INTO "+store+"_item_cost (sales_record_number, shipping) VALUES ("+str(sales_record)+","+str(shipping)+")"
+    db.insertSQL(sql_string)
 
     sql_string2 = "select a.sales_record_number,b.custom_lable, \
     b.quantity*c.units_per_order*d.unit_cost*d.unit_cost_conversion,b.quantity*c.package_cost, \
-    b.quantity,c.stock_reference from "+store+"_item_cost a\
+    b.quantity*c.units_per_order,c.stock_reference from "+store+"_item_cost a\
     inner join "+store+"_sales_tbl b on a.sales_record_number=b.sales_record_number\
     inner join sku_tbl c on b.custom_lable=c.custom_lable inner join stock d \
-    on c.stock_reference=d.stock_reference where a.sales_record_number="+str(sales_record)
+    on c.stock_reference=d.stock_reference where a.sales_record_number="+str.strip(str(sales_record))
     
-    # print(sql_string2)
-    # db.closeDatabase()
-    # sys.exit(0)
     update_item_cost_table(db,sql_string2,store,outstring)
-
-    if sales_record == 0:
-      db.closeDatabase()
-      exit(1)
-    shipping = input("  Enter postage cost: ")
     print("------------------------")
-    sql_string = "INSERT INTO "+store+"_item_cost (sales_record_number, shipping) VALUES ("+str(sales_record)+","+str(shipping)+")"
-    db.insertSQL(sql_string)
  
   """ Close database
   """
